@@ -15,7 +15,6 @@ Obstacles.prototype.init = function(parentEle) {
     this.obsElement.style.left = this.left  + 'px';
     this.obsElement.style.width = this.width  + 'px';
     this.obsElement.style.height = this.height  + 'px';
-
     parentEle.appendChild(this.obsElement);   
 }
 

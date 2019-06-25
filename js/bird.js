@@ -1,4 +1,4 @@
-function Bird(x,y,BIRDWIDTH,BIRDHEIGHT) {
+function Bird(x,y) {
     this.left = x;
     this.top = y;
     this.width = BIRDWIDTH;
@@ -12,6 +12,8 @@ function Bird(x,y,BIRDWIDTH,BIRDHEIGHT) {
     this.element = document.createElement('img');
     this.element.setAttribute('src', BIRDIMAGE[BIRDPOSITION.second]);
     this.element.style.backgroundRepeat =  'no-repeat';
+    this.element.style.width = this.width;
+    this.element.style.height = this.height;
     this.element.style.position = 'absolute';
     this.element.style.top = this.top + 'px';
     this.element.style.left = this.left + 'px';
