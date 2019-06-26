@@ -7,7 +7,7 @@
     wrapper.style.left = 120 + 'px';
     wrapper.style.overflow = 'hidden';
     wrapper.style.backgroundSize = 'contain';
-
+var scores = [];
 var counter1 = 0;
 var counter2 = 0;
 var night = false;
@@ -17,11 +17,36 @@ var isGameOver = false;
 var isFlaping = false;
 var player = new Bird(STARTINGLEFTPOSITION, STARTINGTOPPOSITION);//const: lai need to set parameter??
 player.init(wrapper);
-var pipeTop = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],1);
-pipeTop.init(wrapper);
-var pipeBottom = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],1)
-pipeBottom.init(wrapper);
-var reset = new Exit();
+var pipeTop1 = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2);
+var pipeTop2 = new Obstacles(PIPEPOSITIONX + 200,0,PIPEWIDTH,PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2);
+var pipeBottom1 = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2)
+var pipeBottom2 = new Obstacles(PIPEPOSITIONX + 200,CONTAINERHEIGHT-PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2)
+pipeBottom1.init(wrapper);
+pipeBottom2.init(wrapper);
+pipeTop1.init(wrapper);
+pipeTop2.init(wrapper);
+
+function checkCollision () {
+        if (player.left + player.width  >= (pipeTop1.left && pipeTop2.left) && ((pipeTop1.left + pipeTop1.width) || (pipeTop2.left + pipeTop2.width) >= player.left)) {
+            if (player.top + player.height >= (pipeBottom1.height || pipeBottom2.height) || (player.top || player.top) <= (pipeTop1.top + pipeTop1.height ||pipeTop2.top + pipeTop2.height)) {
+                isGameOver = true;
+                isPlaying =false;
+            }
+
+            if (player.left <= (pipeTop1.left)){
+                score++;
+                scores.push(score);
+            }
+           
+        }
+        if (player.top >= CONTAINERHEIGHT) {
+            isGameOver = true;
+            isPlaying = false;
+        }
+        else {
+            night = false;
+        }
+    }
 
 var listen = window.addEventListener('keydown', function(e){
     if (e.keyCode == 38) {
@@ -31,17 +56,7 @@ var listen = window.addEventListener('keydown', function(e){
     }
     if (e.keyCode == 32) {
         console.log('spacebar');
-        if (isGameOver) {
-            reset.init(score,wrapper);
-        }
-        if (!isPlaying) {
-            isPlaying = true;
-        }
-        else {
-            isplaying = false;
-        }
-
-        // isPLaying = !isPlaying
+        isPLaying = !isPlaying;
     }
 });
 
@@ -54,18 +69,13 @@ function mainloop() {
     console.log('mailloop')
     if (isPlaying) {
        player.moveDown();
-       player.checkCollision();
-       pipeTop.update();
-       pipeBottom.update();
+       pipeTop1.update();
+       pipeTop2.update();
+       pipeBottom1.update();
+       pipeBottom2.update();
+       checkCollision();
     }    
-    if (!isPlaying) {
-        background.init();
-        console.log('from pause state');
-    }
 
-    if (isGameOver) {
-        reset.init(score,wrapper);
-    }
     window.requestAnimationFrame(mainloop);
 
     }

@@ -5,7 +5,7 @@ function Bird(x,y) {
     this.height = BIRDHEIGHT; //v0
     this.scored = false;
     this.element = null;
-    this.flaping = -15;
+    this.flaping = -10;
     this.dy = 0;
 }
     Bird.prototype.init = function(parentEle){
@@ -26,8 +26,19 @@ Bird.prototype.moveDown = function() {
 }
 
 Bird.prototype.moveUp = function() {
-    this.top += this.flaping;
-    this.draw();
+    this.currentPosition = this.top;
+    this.targetPosition = this.currentPosition + this.flaping;
+    if (this.currentPosition >= this.targetPosition) {
+        this.currentPosition = this.currentPosition - 14;
+        this.top = this.currentPosition;
+        this.draw();
+    }
+    else {
+        this.top += GRAVITY;
+        this.draw();
+        
+    }
+    
 }
 
 Bird.prototype.draw = function() {
@@ -95,28 +106,4 @@ Bird.prototype.draw = function() {
     //     // this.flag = 1 ;  
     // }
 
-    // Bird.prototype.checkCollision =function() {
-    //     if (this.left + this.width >= pipeTop.left && pipeTop.left + pipeTop.width >= this.left) {
-    //         if (this.top + this.height >= pipeBottom.height || this.top <= pipeTop.top + pipeTop.height) {
-    //             isGameOver = true;
-    //         }
-
-    //         //not touch top bg condition
-    //         else {
-    //             if (!this.scored) {
-    //                 score++;
-    //                 this.scored = true;
-    //             }
-    //         }
-    //     }
-    //     if (this.top >= CONTAINERHEIGHT) {
-    //         isGameOver = true;
-    //     }
-
-    //     if (this.fallSpeed >= 3) {
-    //         night = true;
-    //     }
-    //     else {
-    //         night = false;
-    //     }
-    // }
+   
