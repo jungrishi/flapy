@@ -1,4 +1,4 @@
-function gameWorld() {
+// function gameWorld() {
 
 
     
@@ -13,16 +13,15 @@ function gameWorld() {
     wrapper.style.backgroundSize = 'contain';
 
     
-
-
-
-
-
-
+var flaping = -25;
+var dy2 = 4;
+var dy = 0;
+var t = 0;//time
 var night = false;
 var score = 0;
 var isPaused = false;
 var isGameOver = false;
+var isFlaping = false;
 
 // var background = new Container();
 // console.log(this);
@@ -30,17 +29,18 @@ var isGameOver = false;
 // console.log(this);
 var player = new Bird(STARTINGLEFTPOSITION, STARTINGTOPPOSITION);//const: lai need to set parameter??
 
-var pipeTop = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],10);
-var pipeBottom = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],10)
+var pipeTop = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2);
+var pipeBottom = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],1)
 var reset = new Exit();
 
-window.addEventListener('keydown', function(e){
-    if (e.keyCode === 38) {
-        player.moveUp(2);
-        console.log('heps')
+var listen = window.addEventListener('keydown', function(e){
+    if (e.keyCode == 38) {
+        isFlaping = true;
+        console.log('heps');
     }
 
-    if (e.keyCode === 32) {
+    if (e.keyCode == 32) {
+        console.log('spacebar');
         if (isGameOver) {
             reset.init(score,wrapper);
         }
@@ -51,17 +51,29 @@ window.addEventListener('keydown', function(e){
     }
 }, false);
 
+var counter = 0;
+function start(){
+mainloop();
+}
 function mainloop() {
+    
     if (!isPaused & !isGameOver) {
        player.updatePosition();
+       player.checkCollision();
        pipeTop.update();
        pipeBottom.update();
+       console.log('from main loop');
     }
-
+    // setTimeout(function(){
     player.init(wrapper);
-    pipeTop.init(wrapper);
-    pipeBottom.init(wrapper);
     
+    counter++;
+    if (counter >= 150){
+        pipeTop.init(wrapper);
+    pipeBottom.init(wrapper);
+        counter = 0;
+}
+    // }, 60);
     if (isPaused) {
         background.init();
         console.log('from pause state');
@@ -70,9 +82,10 @@ function mainloop() {
     if (isGameOver) {
         reset.init(score,wrapper);
     }
+    window.requestAnimationFrame(mainloop);
 
     }
-    window.requestAnimationFrame(mainloop);
-}
+    
+// }
 
-gameWorld();
+// gameWorld();

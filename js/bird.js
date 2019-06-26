@@ -3,10 +3,11 @@ function Bird(x,y) {
     this.top = y;
     this.width = BIRDWIDTH;
     this.height = BIRDHEIGHT;
-    this.fallSpeed = 0;
+    this.fallSpeed = 0; //v0
     this.ySpeed = 0;
     this.scored = false;
     this.element = null;
+    
 }
     Bird.prototype.init = function(parentEle){
     this.element = document.createElement('img');
@@ -25,14 +26,29 @@ function Bird(x,y) {
     // } 
 
     Bird.prototype.updatePosition = function() {
-        this.fallSpeed += dy * dy;
-        this.top += this.fallSpeed;
+        currentPosition = this.top;
+        if (!isFlaping) {
+            flaping = 0;
+            dy += GRAVITY + flaping;
+            currentPosition += dy;
+            this.top = currentPosition;
+            
+        }
+        else {
+            flaping = -20;
+            dy = GRAVITY + flaping;
+            currentPosition += dy;
+            this.top = currentPosition;
+            isFlaping = false;
+        }       
+        
     }
 
     Bird.prototype.moveUp = function(speed) {
+        
         this.fallSpeed = 0;
         this.ySpeed = -speed;
-        this.top += this.ySpeed;
+        this.fallSpeed += this.ySpeed;
     }
 
     Bird.prototype.checkCollision =function() {

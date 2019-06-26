@@ -3,7 +3,7 @@ function Exit() {
 }
 
 Exit.prototype.init = function(score, parentEle) {
-
+    removeEventListener(listen);
     this.element = document.createElement('p');
     // this.element.setAttribute('id','fromDom')
     this.element = document.createTextNode( "SCORE: " + score);
