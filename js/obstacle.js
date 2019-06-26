@@ -24,4 +24,11 @@ Obstacles.prototype.update = function() {
     if (this.left + this.width <= 0) {
         this.left = CONTAINERWIDTH - PIPEWIDTH;
     }
+
+    this.draw();
+}
+
+Obstacles.prototype.draw =function(){
+    this.obsElement.style.marginLeft = this.left  + 'px';
+
 }
