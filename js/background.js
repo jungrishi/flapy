@@ -1,81 +1,117 @@
-    var wrapper = document.getElementById('start-page');
-    wrapper.style.position = 'relative';
-    wrapper.style.width = CONTAINERWIDTH + 'px';
-    wrapper.style.height = CONTAINERHEIGHT + 'px';
-    wrapper.style.backgroundRepeat = 'repeat-x';
-    wrapper.style.background = "url('../images/background-day.png')";
-    wrapper.style.left = 120 + 'px';
-    wrapper.style.overflow = 'hidden';
-    wrapper.style.backgroundSize = 'contain';
-var scores = [];
-var counter1 = 0;
-var counter2 = 0;
-var night = false;
-var score = 0;
-var isPlaying = false;
-var isGameOver = false;
-var isFlaping = false;
-var player = new Bird(STARTINGLEFTPOSITION, STARTINGTOPPOSITION);//const: lai need to set parameter??
-player.init(wrapper);
-var pipeTop1 = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2);
-var pipeTop2 = new Obstacles(PIPEPOSITIONX + 200,0,PIPEWIDTH,PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2);
-var pipeBottom1 = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2)
-var pipeBottom2 = new Obstacles(PIPEPOSITIONX + 200,CONTAINERHEIGHT-PIPEHEIGHT[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],PIPEWIDTH,PIPEPOSITIONY[getRandomInt(PIPEPOSITION.first,PIPEPOSITION.third)],2)
-pipeBottom1.init(wrapper);
-pipeBottom2.init(wrapper);
-pipeTop1.init(wrapper);
-pipeTop2.init(wrapper);
-
-function checkCollision () {
-        if (player.left + player.width  >= (pipeTop1.left && pipeTop2.left) && ((pipeTop1.left + pipeTop1.width) || (pipeTop2.left + pipeTop2.width) >= player.left)) {
-            if (player.top + player.height >= (pipeBottom1.height || pipeBottom2.height) || (player.top || player.top) <= (pipeTop1.top + pipeTop1.height ||pipeTop2.top + pipeTop2.height)) {
-                isGameOver = true;
-                isPlaying =false;
+function GameWorld() {
+    this.scores = [];
+    this.score = 0;
+    this.isPlaying = true;
+    this.isGameOver = false;
+    this.isPaused = false;
+    this.isFlaping = false;
+    this.night = false;
+    this.zero = 0;    
+    this.remove = null;
+    this.addImage = null;
+    this.mainloop;
+  
+    this.worldinit = function(){
+        this.wrapper = document.getElementById('start-page');
+        this.wrapper.setAttribute('class','start-page1');
+        this.wrapper.style.position = 'relative';
+        this.wrapper.style.height = CONTAINERHEIGHT + 'px';
+        this.wrapper.style.backgroundRepeat = 'repeat-x';
+        this.wrapper.style.background = "url('../images/background-day.png')";
+        this.wrapper.style.left = 120 + 'px';
+        this.wrapper.style.overflow = 'hidden';
+        this.wrapper.style.backgroundSize = 'contain';
+        this.wrapper.style.width = CONTAINERWIDTH + 'px';
+        console.log(this.wrapper);      
+        this.objectInit();
+    }
+    
+    this.checkCollision =  function() {
+        if (this.player.left < this.pipeTop1.left + this.pipeTop1.width &&
+            this.player.left + this.player.width > this.pipeTop1.left &&
+            this.player.PIPEHEIGHT1 < this.pipeTop1.PIPEHEIGHT1 + this.pipeTop1.PIPEHEIGHT1 &&
+            this.player.top + this.player.BIRDHEIGHT > this.pipeTop1.PIPEHEIGHT1) {
+             console.log('ccjjncdncdjcnjdncjdn');
+         }
+        if (this.player.left + BIRDWIDTH >= this.pipeTop1.left) {
+            console.log(this.pipeTop2.left);
+            if ((this.player.top <= this.pipeTop1.top + PIPEHEIGHT1) || (this.player.top + BIRDHEIGHT >= this.pipeBottom1)){
+            this.isGameOver = true;
+            this.isPlaying = false;
+            
+            console.log('HELLO');
             }
-
-            if (player.left <= (pipeTop1.left)){
-                score++;
-                scores.push(score);
-            }
-           
         }
-        if (player.top >= CONTAINERHEIGHT) {
-            isGameOver = true;
-            isPlaying = false;
+        else if (this.player.left + BIRDWIDTH >= this.pipeTop2.left) {
+         
+            if ((this.player.top <= this.pipeTop2.top + PIPEHEIGHT2) || (this.player.top + BIRDHEIGHT >= this.pipeBottom2)){
+                this.isGameOver = true;
+                this.isPlaying = false;
+            
+            console.log('HELLO');
+            }
+        }
+        else if (this.player.top >= CONTAINERHEIGHT) {
+            this.isGameOver = true;
+            this.isPlaying = false;
         }
         else {
-            night = false;
+            
         }
     }
 
-var listen = window.addEventListener('keydown', function(e){
-    if (e.keyCode == 38) {
-        isFlaping = true;
-        player.moveUp();
-        console.log('heps');
-    }
-    if (e.keyCode == 32) {
-        console.log('spacebar');
-        isPLaying = !isPlaying;
-    }
-});
+    this.objectInit = function() {
+        this.player = new Bird(STARTINGLEFTPOSITION, STARTINGTOPPOSITION);//const: lai need to set parameter??
+        this.pipeTop1 = new Obstacles(PIPEPOSITIONX,0,PIPEWIDTH,PIPEHEIGHT1,SPEED);
+        this.player.init(this.wrapper);
+        this.pipeBottom1 = new Obstacles(PIPEPOSITIONX,CONTAINERHEIGHT-PIPEHEIGHT1 - GAP + 0,PIPEWIDTH,PIPEHEIGHT1+GAP,SPEED)
+        this.pipeTop2 = new Obstacles(PIPEPOSITIONX + 200,0,PIPEWIDTH,PIPEHEIGHT2,SPEED);
+        this.pipeBottom1.init(this.wrapper);
+        this.pipeBottom2 = new Obstacles(PIPEPOSITIONX + 200,CONTAINERHEIGHT-PIPEHEIGHT2 + 100,PIPEWIDTH,PIPEHEIGHT2+GAP,SPEED)
+        this.pipeTop1.init(this.wrapper);
+        this.pipeBottom2.init(this.wrapper);
+        this.pipeTop2.init(this.wrapper);
 
-function start() {
-    isPlaying = true;
-    mainloop();
+        console.log('player obj' + this.player)
+    }
+    this.mainloop = function() {
+    if (this.isPlaying) {
+       this.player.moveDown();
+       this.pipeTop1.update();
+       this.pipeTop2.update();
+       this.pipeBottom1.update();
+       this.pipeBottom2.update();
+       this.checkCollision();
+    }
+    if (!this.isPlaying){
+        if (this.isGameOver){
+            // document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
+            this.remove = document.querySelector('start-game');
+            this.remove.style.display = 'none';
+            this.addImage = document.createElement('img');
+            this.addImage.setAttribute('src', GAMESTATE[2]);
+        }
 
+        if (isPaused) {
+            // document.getElementById("myDIV").removeEventListener("mousemove", myFunction);
+            this.remove = document.querySelector('start-game');
+            this.remove.style.display = 'none';
+            this.addImage = document.createElement('img');
+            this.addImage.setAttribute('src', GAMESTATE[2]);
+        }
+    }
+    
+    window.requestAnimationFrame(this.mainloop.bind(this));
 }
-function mainloop() {
-    console.log('mailloop')
-    if (isPlaying) {
-       player.moveDown();
-       pipeTop1.update();
-       pipeTop2.update();
-       pipeBottom1.update();
-       pipeBottom2.update();
-       checkCollision();
-    }    
+}
 
-    window.requestAnimationFrame(mainloop);
 
+    function start() {
+        var game =  new GameWorld()
+        game.worldinit();
+        game.mainloop();
+        
+
+
+    
     }

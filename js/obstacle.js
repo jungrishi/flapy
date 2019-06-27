@@ -21,7 +21,7 @@ Obstacles.prototype.init = function(parentEle) {
 Obstacles.prototype.update = function() {
     this.left -= this.speed;
 
-    if (this.left + this.width <= 0) {
+    if (this.left + (this.width + 30)<= 0) {
         this.left = CONTAINERWIDTH - PIPEWIDTH;
     }
     this.draw();

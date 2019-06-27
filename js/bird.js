@@ -5,12 +5,27 @@ function Bird(x,y) {
     this.height = BIRDHEIGHT; //v0
     this.scored = false;
     this.element = null;
-    this.flaping = -10;
+    this.flaping = -40;
     this.dy = 0;
-}
-    Bird.prototype.init = function(parentEle){
+    this.rotate = 0;
+    that = this;
+
+    window.addEventListener('keydown',function(e) {
+            if (e.keyCode == 38) {
+                that.isFlaping = true;
+                that.moveUp(e);
+                console.log('heps');
+            }
+            if (e.keyCode == 32) {
+                console.log('spacebar');
+                
+                that.isPLaying = !that.isPlaying;
+            }
+        });
+    }
+Bird.prototype.init = function(parentEle){
     this.element = document.createElement('img');
-    this.element.setAttribute('src', BIRDIMAGE[BIRDPOSITION.second]);
+    this.element.setAttribute('src', BIRDIMAGE[2]);
     this.element.style.backgroundRepeat =  'no-repeat';
     this.element.style.width = this.width;
     this.element.style.height = this.height;
@@ -21,29 +36,35 @@ function Bird(x,y) {
 }
 
 Bird.prototype.moveDown = function() {
-    this.top += GRAVITY;
+    this.top += 1;
+    this.rotate += 2;
     this.draw();
 }
 
 Bird.prototype.moveUp = function() {
+    console.log('that is this')
     this.currentPosition = this.top;
+    this.rotate -= 2;
     this.targetPosition = this.currentPosition + this.flaping;
-    if (this.currentPosition >= this.targetPosition) {
-        this.currentPosition = this.currentPosition - 14;
-        this.top = this.currentPosition;
+    this.currentPosition -= 20 ;
+    if (this.currentPosition <= this.targetPosition) {
+        this.top = this.currentPosition + GRAVITY
         this.draw();
     }
     else {
-        this.top += GRAVITY;
+        this.top = this.currentPosition;
         this.draw();
-        
+        this.currentPosition -= 17;        
     }
     
 }
 
 Bird.prototype.draw = function() {
+    this.element.style.transform = "rotate("+this.rotate+"deg)";
     this.element.style.top = this.top + 'px';
+
 }
+
 
 
 
